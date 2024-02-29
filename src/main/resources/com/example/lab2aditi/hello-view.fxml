@@ -4,32 +4,46 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="492.0" prefWidth="834.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.lab2aditi.HelloController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-  </padding>
-   <children>
-      <TableView prefHeight="387.0" prefWidth="805.0">
-        <columns>
-          <TableColumn fx:id="idcoulmn" prefWidth="150.40002822875977" text="Student id " />
-          <TableColumn fx:id="studentcolumn" minWidth="0.0" prefWidth="150.3999481201172" text="Student Name" />
-            <TableColumn fx:id="phonecolumn" minWidth="0.0" prefWidth="218.4000244140625" text="Phone Number" />
-            <TableColumn fx:id="adresscolumn" minWidth="0.0" prefWidth="256.0" text="Adress" />
-        </columns>
-      </TableView>
-      <HBox alignment="CENTER" prefHeight="162.0" prefWidth="794.0" spacing="10.0">
-         <children>
-            <Button fx:id="loadbutn" alignment="CENTER" mnemonicParsing="false" text="load" />
-            <Button fx:id="insertbutn" alignment="CENTER" mnemonicParsing="false" text="Insert" />
-            <Button fx:id="updatebutn" alignment="CENTER" mnemonicParsing="false" text="update" />
-            <Button fx:id="deletebutn" alignment="CENTER" mnemonicParsing="false" text="delete" />
-         </children>
-         <padding>
-            <Insets top="10.0" />
-         </padding>
-      </HBox>
-   </children>
+<VBox alignment="CENTER" prefHeight="492.0" prefWidth="834.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab2aditi.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <HBox>
+            <children>
+                <TableView fx:id="tableforstudent" prefHeight="288.0" prefWidth="636.0">
+                    <columns>
+                        <TableColumn fx:id="idcolumn" prefWidth="98.40002822875977" text="Student id " />
+                        <TableColumn fx:id="studentcolumn" minWidth="0.0" prefWidth="142.40000915527344" text="Student Name" />
+                        <TableColumn fx:id="phonecolumn" minWidth="0.0" prefWidth="111.20001220703125" text="Phone Number" />
+                        <TableColumn fx:id="addresscolumn" minWidth="0.0" prefWidth="111.39996337890625" text="Address" />
+                    </columns>
+                </TableView>
+                <VBox alignment="CENTER" prefHeight="256.0" prefWidth="177.0" spacing="10.0">
+                    <children>
+                        <TextField fx:id="idinput" promptText="Enter id" />
+                        <TextField fx:id="nameinput" alignment="TOP_LEFT" promptText="Enter Name" />
+                        <TextField fx:id="phoneinput" layoutX="10.0" layoutY="36.0" promptText="Enter Phone" />
+                        <TextField fx:id="addressinput" layoutX="10.0" layoutY="62.0" promptText="EnterAdress" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="162.0" prefWidth="794.0" spacing="10.0">
+            <children>
+                <Button fx:id="loadbutn" alignment="CENTER" mnemonicParsing="false" onAction="#loaddata" text="load" />
+                <Button fx:id="insertbutn" alignment="CENTER" mnemonicParsing="false" onAction="#insertdata" text="Insert" />
+                <Button fx:id="updatebutn" alignment="CENTER" mnemonicParsing="false" onAction="#updatedata" text="update" />
+                <Button fx:id="deletebutn" alignment="CENTER" mnemonicParsing="false" onAction="#deletedata" text="delete" />
+            </children>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+        </HBox>
+        <TextField />
+    </children>
 </VBox>

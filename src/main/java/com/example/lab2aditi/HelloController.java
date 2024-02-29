@@ -1,206 +1,122 @@
 package com.example.lab2aditi;
 
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.*;
-
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-
 
 public class HelloController implements Initializable {
     @FXML
-    private TableColumn<studentinfo,String> adresscolumn;
-
+    private TextField phoneinput, nameinput, addressinput, idinput;
     @FXML
-    private Button deletebutn;
-
+    private TableColumn<studentinfo, String> addresscolumn;
     @FXML
-    private TableColumn<studentinfo, Integer> idcoulmn;
-
+    private TableColumn<studentinfo, Integer> idcolumn;
     @FXML
-    private Button insertbutn;
-
+    private TableColumn<studentinfo, String> phonecolumn, studentcolumn;
     @FXML
-    private Button loadbutn;
+    private TableView<studentinfo> tableforstudent;
 
-    @FXML
-    private TableColumn<studentinfo, String> phonecolumn;
+    private ObservableList<studentinfo> studentList = FXCollections.observableArrayList();
 
-    @FXML
-    private TableColumn<studentinfo, String> studentcolumn;
-
-    @FXML
-    private Button updatebutn;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        idcolumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        studentcolumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        phonecolumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        addresscolumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tableforstudent.setItems(studentList);
     }
 
-     private static final String url="jdbc:mysql://localhost:3306/lab2";
-    private static final String password="";
-    private static final  String username="root";
+    @FXML
+    void loaddata(ActionEvent event) {
+        populateTable();
+    }
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url,username,password);}
     public void populateTable() {
-
-        list.clear();
-
-
-// Establish a database connection
-        String jdbcUrl = "jdbc:mysql://localhost:3306/db_csd214";
+        studentList.clear();
+        String jdbcUrl = "jdbc:mysql://localhost:3306/lab2";
         String dbUser = "root";
         String dbPassword = "";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser,
-                dbPassword)) {
-// Execute a SQL query to retrieve data from the database
-            String query = "SELECT * FROM `tbl_employee`";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword)) {
+            String query = "SELECT * FROM studentinfo";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
-
-
-// Populate the table with data from the database
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                String employee_name = resultSet.getString("employee_name");
-                int salary = resultSet.getInt("salary");
+                String name = resultSet.getString("name");
+                String phone = resultSet.getString("phone");
                 String address = resultSet.getString("address");
-                int age = resultSet.getInt("age");
-                tableView.getItems().add(new Employee(id, employee_name, salary,
-                        address,age));
+                studentList.add(new studentinfo(id, name, phone, address));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void InsertData(ActionEvent actionEvent) {
-
-        String Ename =ename.getText();
-        String Esalary =esalary.getText();
-        String Eaddress =eaddress.getText();
-        String Eage =eage.getText();
-
-        InserTable(Ename,Esalary,Eaddress,Eage);
+    @FXML
+    void insertdata(ActionEvent event) {
+        String name = nameinput.getText();
+        String phone = phoneinput.getText();
+        String address = addressinput.getText();
+        insertTable(name, phone, address);
+        populateTable();
     }
 
-
-    public void InserTable(String ename,String esalary,String eaddress,String eage) {
-// Establish a database connection
-        String jdbcUrl = "jdbc:mysql://localhost:3306/db_csd214";
+    public void insertTable(String name, String phone, String address) {
+        String jdbcUrl = "jdbc:mysql://localhost:3306/lab2";
         String dbUser = "root";
         String dbPassword = "";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser,
-                dbPassword)) {
-// Execute a SQL query to retrieve data from the database
-            String query = "INSERT INTO `tbl_employee`( `employee_name`, `salary`, `address`, `age`) VALUES ('"+ename+"','"+esalary+"','"+eaddress+"','"+eage+"')";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword)) {
+            String query = "INSERT INTO studentinfo (name, phone, address) VALUES ('" + name + "','" + phone + "','" + address + "')";
             Statement statement = connection.createStatement();
             statement.execute(query);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-    public void DeleteData(ActionEvent actionEvent) {
-
-
-        String Eid=eid.getText();
-
-        String jdbcUrl = "jdbc:mysql://localhost:3306/db_csd214";
+    @FXML
+    void deletedata(ActionEvent actionEvent) {
+        String sid = idinput.getText();
+        String jdbcUrl = "jdbc:mysql://localhost:3306/lab2";
         String dbUser = "root";
         String dbPassword = "";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser,
-                dbPassword)) {
-// Execute a SQL query to retrieve data from the database
-            String query = "DELETE FROM `tbl_employee` WHERE id='"+Eid+"'";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword)) {
+            String query = "DELETE FROM studentinfo WHERE id='" + sid + "'";
             Statement statement = connection.createStatement();
             statement.execute(query);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
+        populateTable();
     }
 
-    public void UpdateData(ActionEvent actionEvent) {
-
-        String Eid =eid.getText();
-        String Ename =ename.getText();
-        String Esalary =esalary.getText();
-        String Eaddress =eaddress.getText();
-        String Eage =eage.getText();
-
-
-
-        String jdbcUrl = "jdbc:mysql://localhost:3306/db_csd214";
+    @FXML
+    void updatedata(ActionEvent actionEvent) {
+        String sid = idinput.getText();
+        String sname = nameinput.getText();
+        String sphone = phoneinput.getText();
+        String saddress = addressinput.getText();
+        String jdbcUrl = "jdbc:mysql://localhost:3306/lab2";
         String dbUser = "root";
         String dbPassword = "";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser,
-                dbPassword)) {
-// Execute a SQL query to retrieve data from the database
-            String query = "UPDATE `tbl_employee` SET `employee_name`='"+Ename+"',`salary`='"+Esalary+"',`address`='"+Eaddress+"',`age`='"+Eage+"' WHERE id='"+Eid+"'";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword)) {
+            String query = "UPDATE studentinfo SET name='" + sname + "', phone='" + sphone + "', address='" + saddress + "' WHERE id='" + sid + "'";
             Statement statement = connection.createStatement();
             statement.execute(query);
-
             populateTable();
-
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
+        populateTable();
     }
 
-    public void LoadData(ActionEvent actionEvent) {
-
-
-        String Eid =eid.getText();
-
-        String jdbcUrl = "jdbc:mysql://localhost:3306/db_csd214";
-        String dbUser = "root";
-        String dbPassword = "";
-
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser,
-                dbPassword)) {
-// Execute a SQL query to retrieve data from the database
-            String query = "SELECT * FROM `tbl_employee` WHERE id='"+Eid+"'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-// Populate the table with data from the database
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String employee_name = resultSet.getString("employee_name");
-                int salary = resultSet.getInt("salary");
-                String address = resultSet.getString("address");
-                int age = resultSet.getInt("age");
-
-
-                ename.setText(employee_name);
-                esalary.setText(String.valueOf(salary));
-                eaddress.setText(address);
-                eage.setText(String.valueOf(age));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-
-    }
-
-    public void set_username(String messge){
-        user_name.setText(messge);
-    }
-}
 }
